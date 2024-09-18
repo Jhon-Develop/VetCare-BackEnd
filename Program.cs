@@ -40,7 +40,7 @@ builder.Services.AddCors(options =>
 
 // For connect to the session storage
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<JwtHelper>()
+builder.Services.AddScoped<JwtHelper>();
 
 builder.Services.AddControllers();
 

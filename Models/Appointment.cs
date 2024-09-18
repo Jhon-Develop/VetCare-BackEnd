@@ -14,8 +14,8 @@ namespace VetCare_BackEnd.Models
         public int Id { get; set; }
 
         [Required]
-        [DataType(DataType.Date)]
-        public DateOnly StartDate { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime StartDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -24,7 +24,7 @@ namespace VetCare_BackEnd.Models
         [Required]
         public bool Available { get; set; }
 
-        [MaxLength(260, ErrorMessage = "The input is too long")]
+        //Delete the length restriction
         public string? Description { get; set; }
 
         // Foreign Keys
