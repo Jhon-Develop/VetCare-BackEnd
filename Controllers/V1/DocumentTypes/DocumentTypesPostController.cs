@@ -8,19 +8,13 @@ using VetCare_BackEnd.Models;
 
 namespace VetCare_BackEnd.Controllers.V1.DocumentTypes;
 
-[ApiController]
-[Route("api/v1/DocumentTypes")]
-public class DocumentTypesPostController : ControllerBase
-{
-    private readonly ApplicationDbContext _context;
 
-    public DocumentTypesPostController(ApplicationDbContext context)
-    {
-        _context = context;
-    }
+public partial class DocumentTypeController
+{
+
 
     [HttpPost()]
-    public async Task<IActionResult> Create(DocumentType newDocumentType)
+    public async Task<IActionResult> Create([FromBody] DocumentType newDocumentType)
     {
         if (!ModelState.IsValid)
         {
@@ -31,5 +25,7 @@ public class DocumentTypesPostController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok("user add succesfuly");
     }
+
+
 
 }

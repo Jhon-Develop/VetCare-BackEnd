@@ -48,7 +48,6 @@ namespace VetCare_BackEnd.Models
         public required string Email { get; set; }
 
         public required int DocumentTypeId { get; set; }
-      
         public required int RoleId { get; set; }
 
         // Navigation properties

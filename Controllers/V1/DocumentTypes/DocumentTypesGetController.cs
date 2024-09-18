@@ -8,18 +8,12 @@ using VetCare_BackEnd.Data;
 
 namespace VetCare_BackEnd.Controllers.V1.DocumentTypes
 {
-    [ApiController]
-    [Route("api/v1/DocumentTypes")]
-    public class DocumentTypesGetController : ControllerBase
+
+    public partial class DocumentTypeController
     {
-        private readonly ApplicationDbContext _context;
 
-        public DocumentTypesGetController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
 
-        [HttpGet("AllDocumentTypes")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _context.DocumentTypes.ToListAsync();

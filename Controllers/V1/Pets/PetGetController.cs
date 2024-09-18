@@ -8,15 +8,32 @@ using VetCare_BackEnd.Data;
 
 namespace VetCare_BackEnd.Controllers.V1.Pets
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PetGetController : ControllerBase
+    
+    public partial class PetController
     {
-        private readonly ApplicationDbContext _context;
-
-        public PetGetController(ApplicationDbContext context)
+        [HttpGet("allPaginatedPets")]
+        public async Task<IActionResult> AllPets([FromQuery] int page, [FromQuery] int quantity)
         {
-            _context = context;
+            if (page < 1)
+            {
+                return BadRequest("the page number must be greated than or equal to 1");
+            }
+            if (quantity < 1)
+            {
+                return BadRequest("the page size must be greated than or equal to 1.");
+            }
+
+            var result = await _context.Pets
+            .Skip((page - 1)*quantity)
+            .Take(quantity)
+            .ToListAsync();
+
+            if (result.Count == 0)
+            {
+                return NotFound("The table 'Pets' is empty");
+            }
+
+            return Ok(result);
         }
 
         [HttpGet("allPets")]

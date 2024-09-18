@@ -10,60 +10,92 @@ using VetCare_BackEnd.Models;
 
 namespace VetCare_BackEnd.Controllers.V1
 {
-    [ApiController]
-    [Route("api/v1/users")]
-    public class UserGetController : ControllerBase
+
+    public partial class UserController
     {
-        // private readonly ApplicationDbContext ConnectionDb;
-
-        // public UserGetController(ApplicationDbContext variableConnection)
-        // {
-        //     ConnectionDb = variableConnection;
-        // }
 
 
-        // [HttpGet]
-        // public async Task<ActionResult<IEnumerable<User>>> GetUsers()
-        // {
-        //     return await ConnectionDb.Users.ToListAsync();
-        // }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>> GetUsers(
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10
 
-        // //GET /Users/ id/{id}
+        )
 
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult> GetUserById(int id)
-        // {
-        //     var Usersearch = await ConnectionDb.Users.FindAsync(id);
-        //     return Ok(Usersearch);
-        // }
 
-        // [HttpGet("findByName/{name}")]
+        {
+            if (pageNumber < 1)
+            {
+                return BadRequest("The number page must be equal or greater than 1");
+            }
 
-        // public async Task<ActionResult<IEnumerable<User>>> GetUserByname(string name)
-        // {
-        //     var Usersearch = await ConnectionDb.Users.FirstOrDefaultAsync(p => p.Name.Contains(name));
-        //     if (Usersearch == null)
-        //     {
-        //         return NotFound("This name is not in our sistem"); // Return 404 if the user is not found
-        //     }
-        //     return Ok(Usersearch);
-        // }
+            if (pageSize < 1)
+            {
+                return BadRequest("The page Size  must be equal or greater than 1");
+            }
+            var Users = await _userService.Users
+             .Skip((pageNumber - 1) * pageSize)
+             .Take(pageSize)
+             .ToListAsync();
+            return Ok(Users);
+        }
 
-        // [HttpGet ("FindByInitial/{initial}")]
+        //GET /Users/ id/{id}
 
-        // public async Task<ActionResult> GetUserByLetter (string initial)
-        // {
-        //     var Usersearch = await ConnectionDb.Users.Where(p =>p.Name.StartsWith(initial)).ToListAsync();
-        //     if (Usersearch == null)
-        //     {
-        //         return NotFound("There is Not a name that start with that letter");
-        //     }
-        //     return Ok(Usersearch);
-        // }
+        [HttpGet("{id}")]
+        public async Task<ActionResult> GetUserById(int id)
+        {
+            var Usersearch = await _userService.Users.FindAsync(id);
+            return Ok(Usersearch);
+        }
 
+        [HttpGet("findByName/{name}")]
+
+        public async Task<ActionResult<IEnumerable<User>>> GetUserByname([FromRoute]string name)
+        {
+            var Usersearch = await _userService.Users.FirstOrDefaultAsync(p => p.Name.Contains(name));
+            if (Usersearch == null)
+            {
+                return NotFound("This name is not in our sistem"); // Return 404 if the user is not found
+            }
+            return Ok(Usersearch);
+        }
+
+        [HttpGet("FindByInitial/{initial}")]
+
+        public async Task<ActionResult> GetUserByLetter(string initial)
+        {
+            var Usersearch = await _userService.Users.Where(p => p.Name.StartsWith(initial)).ToListAsync();
+            if (Usersearch == null)
+            {
+                return NotFound("There is Not a name that start with that letter");
+            }
+            return Ok(Usersearch);
+        }
+
+
+        [HttpGet("getbykeyword")]
+    public async Task<IActionResult> GetByKeyword([FromQuery] string keyword)
+    {
+        if(string.IsNullOrEmpty(keyword))
+        {
+            return BadRequest("Keyword is required");
+        }
+
+        var users = await _userService.Users.ToListAsync();
+
+        var result = users.Where(r => 
+            r.Name.Contains(keyword, System.StringComparison.OrdinalIgnoreCase)).
+        ToList();
         
+        if(result.Count() == 0)
+        {
+            return NotFound("No roles found with that keyword");
+        }
+        return Ok(result);
+    }
 
     }
 
-
 }
+
+

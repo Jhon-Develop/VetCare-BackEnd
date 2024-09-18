@@ -6,30 +6,23 @@ using Microsoft.AspNetCore.Mvc;
 using MySqlX.XDevAPI.CRUD;
 using VetCare_BackEnd.Data;
 
-namespace VetCare_BackEnd.Controllers.V1
-{
-    [ApiController]
-    [Route("api/v1/users")]
-    public class UserDeleteController : ControllerBase
-    {
-        private readonly ApplicationDbContext ConnectionDb;
+namespace VetCare_BackEnd.Controllers.V1;
 
-        public UserDeleteController(ApplicationDbContext variableConnection)
+
+    public partial class UserController
+    {
+        [HttpDelete]
+
+        public async Task<ActionResult> Delete (int id)
         {
-            ConnectionDb= variableConnection;
+            var Usersearch = await _userService.Users.FindAsync(id);
+            _userService.Users.Remove(Usersearch);
+            _userService.SaveChanges();
+            return Ok("The user has been deleted ");
         }
 
-        // [HttpDelete]
-
-        // public async Task<ActionResult> DeletingById (int id)
-        // {
-        //     var Usersearch = await ConnectionDb.Users.FindAsync(id);
-        //     ConnectionDb.Users.Remove(Usersearch);
-        //     ConnectionDb.SaveChanges();
-        //     return NoContent();
-        // }
-
-
-
     }
-}
+
+
+
+
