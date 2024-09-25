@@ -19,15 +19,15 @@ git clone https://github.com/Jhon-Develop/VetCare_BackEnd.git
 cd VetCare_BackEnd
 
 ### 2. Configure the .env file at the root of the project with the following variables:
-**DB_HOST=** host<br>
-**DB_PORT=** port<br>
-**DB_DATABASE=** database<br>
-**DB_USERNAME=** user<br>
-**DB_PASSWORD=** Password<br>
-**JWTKEY=** KEY<br>
-**EMAIL=** email<br>
-**PASSWORD=** password<br>
-**APIKEY_REMOVEBG=** APIKEY_REMOVEBG
+**DB_HOST=** bisjyp95m3bxm1kyeq4g-mysql.services.clever-cloud.com<br>
+**DB_PORT=** 3306<br>
+**DB_DATABASE=** bisjyp95m3bxm1kyeq4g<br>
+**DB_USERNAME=** urgf9rpffgzhrije<br>
+**DB_PASSWORD=** P0vs0vDcsKBVCBOVYqg7d<br>
+**JWTKEY=** 4cc2e6340aaa321c5f06c570160ea4cdfff68bc512c9b806c418f378da025c2<br>
+**EMAIL=** vetcarepets2024@gmail.com<br>
+**PASSWORD=** gfnekcdfltsipcad<br>
+**APIKEY_REMOVEBG=** 8sXu8UQBfPxMXbMP15C8eg6j
 
 Replace with the respective variable values.
 
