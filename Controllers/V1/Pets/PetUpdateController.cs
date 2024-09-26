@@ -17,7 +17,7 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
         /// <param name="id">The id of the pet that is going to be update</param>
         /// <returns>An 200 http alert</returns>
         [HttpPut("UpdatePet/{id}")]
-        public async Task<IActionResult> UpdatePet([FromForm]PetDTO _petDTO, int id)
+        public async Task<IActionResult> UpdatePet([FromForm] PetDTO _petDTO, int id)
         {
             if (_petDTO == null)
             {
@@ -86,13 +86,19 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
 
             petToConvert.DeleteHash = jsonResponse["data"]?["deletehash"]?.ToString();
 
-            // Esto me marca la entidad Pet como modificada
-            _context.Entry(petToConvert).State = EntityState.Modified;
+            try
+            {
+                // Esto me marca la entidad Pet como modificada
+                _context.Entry(petToConvert).State = EntityState.Modified;
 
-            await _context.SaveChangesAsync();
-            return Ok("Pet Updated successfully");
-
-
+                await _context.SaveChangesAsync();
+                return Ok("Pet Updated successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
     }
 }
