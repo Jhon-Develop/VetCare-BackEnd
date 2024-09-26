@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VetCare_BackEnd.Models;
 
 namespace VetCare_BackEnd.Controllers.V1.Pets
@@ -35,11 +36,15 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
                 return NotFound("Pet not found");
             }
 
-            petToConvert.Name = _petDTO.Name.ToLower();
+            // ------------ Asi seria codigo Spaghetti --------------------
 
-            petToConvert.Breed = _petDTO.Breed.ToLower();
+            // petToConvert.Name = _petDTO.Name.ToLower();
 
-            petToConvert.Weight = _petDTO.Weight.ToUpper();
+            // petToConvert.Breed = _petDTO.Breed.ToLower();
+
+            // petToConvert.Weight = _petDTO.Weight.ToUpper();
+
+            // -----------------------------------------------------------
 
 
             if (_petDTO.BirthDate.Year > DateTime.Now.Year)
@@ -47,9 +52,13 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
                 return BadRequest("We have not yet reached the target date");
             }
 
-            petToConvert.BirthDate = _petDTO.BirthDate;
+            // ------------ Asi seria codigo Spaghetti --------------------
 
-            petToConvert.Sex = _petDTO.Sex.ToLower();
+            // petToConvert.BirthDate = _petDTO.BirthDate;
+
+            // petToConvert.Sex = _petDTO.Sex.ToLower();
+
+            // --------------------------------------------------------------
 
             if (petToConvert.ImagePath == null)
             {
@@ -64,6 +73,9 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
                 return BadRequest("No data in the image field");
             }
 
+            // Esto va a la entidad Pet y le cambia los valores que encuentre iguales a los del DTO
+            _context.Entry(petToConvert).CurrentValues.SetValues(_petDTO);
+
             var deleteHash = petToConvert.DeleteHash;
 
             await _imageHelper.DeleteImage(deleteHash);
@@ -73,6 +85,9 @@ namespace VetCare_BackEnd.Controllers.V1.Pets
             petToConvert.ImagePath = jsonResponse["data"]?["link"]?.ToString();
 
             petToConvert.DeleteHash = jsonResponse["data"]?["deletehash"]?.ToString();
+
+            // Esto me marca la entidad Pet como modificada
+            _context.Entry(petToConvert).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
             return Ok("Pet Updated successfully");
